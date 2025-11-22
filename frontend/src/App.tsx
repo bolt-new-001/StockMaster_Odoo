@@ -1,0 +1,70 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store';
+
+// Components
+import { Layout } from './components/Layout/Layout';
+import { LoginPage } from './components/Auth/LoginPage';
+import { SignupPage } from './components/Auth/SignupPage';
+import { ProtectedRoute } from './components/ProtectedRoute';
+
+// Pages
+import { Dashboard } from './pages/Dashboard';
+import { WarehouseDashboard } from './pages/WarehouseDashboard';
+import { StaffManagement } from './pages/StaffManagement';
+import { MyTasks } from './pages/MyTasks';
+import { Products } from './pages/Products';
+import { Receipts } from './pages/operations/Receipts';
+import { Deliveries } from './pages/operations/Deliveries';
+import { Adjustments } from './pages/operations/Adjustments';
+import { MoveHistory } from './pages/MoveHistory';
+import { Settings } from './pages/Settings';
+
+function App() {
+  return (
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Routes>
+
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+
+            {/* Protected App Routes */}
+            <Route
+              path="/*"
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              {/* Default redirect (✔ FIXED: using index route) */}
+              <Route index element={<Navigate to="dashboard" replace />} />
+
+              {/* App Pages */}
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="warehouse-dashboard" element={<WarehouseDashboard />} />
+              <Route path="staff-management" element={<StaffManagement />} />
+              <Route path="my-tasks" element={<MyTasks />} />
+              <Route path="products" element={<Products />} />
+              <Route path="operations/receipts" element={<Receipts />} />
+              <Route path="operations/deliveries" element={<Deliveries />} />
+              <Route path="operations/adjustments" element={<Adjustments />} />
+              <Route path="move-history" element={<MoveHistory />} />
+              <Route path="settings" element={<Settings />} />
+
+              {/* Fallback for unknown routes inside layout */}
+              <Route path="*" element={<Navigate to="dashboard" replace />} />
+            </Route>
+
+          </Routes>
+        </div>
+      </Router>
+    </Provider>
+  );
+}
+
+export default App;
